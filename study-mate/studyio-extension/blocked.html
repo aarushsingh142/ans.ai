@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Blocked - Study Assistant</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    
+    .blocked-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .block-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      color: #f44336;
+    }
+    
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #f44336;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    
+    .timer {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #4a6fa5;
+    }
+    
+    .suggestions {
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      padding: 20px;
+      margin-top: 30px;
+      text-align: left;
+    }
+    
+    .suggestions h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #555;
+    }
+    
+    .suggestions ul {
+      padding-left: 20px;
+    }
+    
+    .suggestions li {
+      margin-bottom: 10px;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4a6fa5;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .button:hover {
+      background-color: #3c5a87;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #292929;
+        color: #e0e0e0;
+      }
+      
+      .blocked-container {
+        background-color: #333;
+      }
+      
+      .suggestions {
+        background-color: #3a3a3a;
+      }
+      
+      .suggestions h2 {
+        color: #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blocked-container">
+    <svg class="block-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM4 12C4 7.58 7.58 4 12 4C14.03 4 15.88 4.76 17.31 6.04L6.04 17.31C4.76 15.88 4 14.03 4 12ZM12 20C9.97 20 8.12 19.24 6.69 17.96L17.96 6.69C19.24 8.12 20 9.97 20 12C20 16.42 16.42 20 12 20Z" fill="currentColor"/>
+    </svg>
+    
+    <h1>Site Blocked</h1>
+    
+    <p>This site has been temporarily blocked during your study session to help you stay focused and productive.</p>
+    
+    <div class="timer">
+      <span id="time-left">00:00</span> remaining in your study session
+    </div>
+    
+    <div class="suggestions">
+      <h2>What to do instead:</h2>
+      <ul>
+        <li>Return to your study materials</li>
+        <li>Take a deep breath and refocus your attention</li>
+        <li>Write down what you're learning in your Study Assistant notes</li>
+        <li>If you need a break, use the timer in Study Assistant to take a structured break</li>
+      </ul>
+    </div>
+    
+    <button id="override-btn" class="button">Override Block (Emergency Only)</button>
+  </div>
+  
+  <script>
+    // Get remaining time from the extension
+    chrome.runtime.sendMessage({ action: 'getTimerState' }, function(response) {
+      if (response && response.timerState) {
+        updateTimer(response.timerState);
+      }
+    });
+    
+    // Update timer display
+    function updateTimer(timerState) {
+      if (timerState.isRunning && timerState.startTime) {
+        const elapsed = Date.now() - timerState.startTime;
+        const remaining = timerState.sessionDuration - elapsed;
+        
+        if (remaining > 0) {
+          const minutes = Math.floor(remaining / 60000);
+          const seconds = Math.floor((remaining % 60000) / 1000);
+          document.getElementById('time-left').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+      }
+    }
+    
+    // Check timer state every second
+    setInterval(() => {
+      chrome.runtime.sendMessage({ action: 'getTimerState' }, function(response) {
+        if (response && response.timerState) {
+          updateTimer(response.timerState);
+        }
+      });
+    }, 1000);
+    
+    // Override button (for emergencies only)
+    document.getElementById('override-btn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to override the block? This should only be used for emergencies.')) {
+        chrome.runtime.sendMessage({ action: 'overrideBlock' }, function() {
+          // Go back to the previous page
+          history.back();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
