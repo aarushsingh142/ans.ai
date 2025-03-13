@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExplainSnap Options</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 30px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background-color: #9b59b6;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    header img {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+    }
+    
+    header h1 {
+      font-size: 22px;
+    }
+    
+    .section {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #555;
+    }
+    
+    .option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .option-row:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .option-label {
+      flex: 1;
+    }
+    
+    .option-name {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    
+    .option-description {
+      font-size: 13px;
+      color: #777;
+    }
+    
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+      margin-left: 15px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #9b59b6;
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px #9b59b6;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    
+    .api-key-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: white;
+      border: 1px solid #ddd;
+    }
+    
+    button.primary {
+      background-color: #9b59b6;
+      color: white;
+      border: none;
+    }
+    
+    button.primary:hover {
+      background-color: #8e44ad;
+    }
+    
+    .shortcut-key {
+      display: inline-block;
+      background-color: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      border: 1px solid #ddd;
+      margin: 0 2px;
+    }
+    
+    footer {
+      padding: 15px 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+    }
+    
+    .success-message {
+      background-color: #dff0d8;
+      color: #3c763d;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="images/icon48.png" alt="ExplainSnap Logo">
+      <h1>ExplainSnap Options</h1>
+    </header>
+    
+    <div class="section">
+      <h2>General Settings</h2>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">Enable AI Analysis</div>
+          <div class="option-description">Automatically analyze captured images with AI to detect text and provide explanations</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="aiToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">Step-by-Step Solutions</div>
+          <div class="option-description">Show detailed step-by-step explanations for math problems and other content</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="stepsToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">Capture Shortcut</div>
+          <div class="option-description">Use <span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Shift</span> + <span class="shortcut-key">E</span> to quickly capture a screenshot</div>
+        </div>
+        <button id="changeShortcutBtn">Change</button>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>AI Settings</h2>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">API Key</div>
+          <div class="option-description">Enter your API key to use with the AI analysis feature</div>
+          <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Enter your API key">
+          <div class="button-row">
+            <button id="testApiBtn">Test Connection</button>
+            <button id="saveApiBtn" class="primary">Save Key</button>
+          </div>
+          <div id="apiSuccessMessage" class="success-message">API key saved successfully!</div>
+        </div>
+      </div>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">AI Service</div>
+          <div class="option-description">Choose which AI service to use for analysis</div>
+        </div>
+        <select id="aiServiceSelect" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+          <option value="openai">OpenAI</option>
+          <option value="google">Google Vision + LLM</option>
+          <option value="azure">Azure AI</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Storage Settings</h2>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">Clear History</div>
+          <div class="option-description">Delete all saved captures and their analysis</div>
+        </div>
+        <button id="clearHistoryBtn">Clear History</button>
+      </div>
+      
+      <div class="option-row">
+        <div class="option-label">
+          <div class="option-name">Storage Usage</div>
+          <div class="option-description" id="storageUsage">Used: 0 MB / 5 MB</div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      ExplainSnap v1.0 &copy; 2025
+    </footer>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>
