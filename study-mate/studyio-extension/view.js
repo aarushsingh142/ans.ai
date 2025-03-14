@@ -80,9 +80,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to load capture data
     function loadCaptureData(id) {
+      console.log("Loading capture data for ID:", id);
       chrome.storage.local.get(['captureHistory'], function(result) {
+        console.log("Retrieved storage data:", result);
         const history = result.captureHistory || [];
         const captureItem = history.find(item => item.id === id);
+        console.log("Found capture item:", captureItem);
         
         if (!captureItem) {
           showError('Capture not found');
